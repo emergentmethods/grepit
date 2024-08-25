@@ -1,18 +1,22 @@
+![image](https://github.com/user-attachments/assets/5561943c-0a51-4861-871f-e41749afbe90)
+
+
 # grepit
 The secure way to to never remember terminal commands
+
 
 ![image](https://github.com/user-attachments/assets/149bf34a-0c0d-4dc4-8192-25e9c4afe5f1)
 
 Wanna know how to us it?
 
-```
+```bash
 sudo apt install fzf
 vim ~/.bashrc
 ```
 
 Copy the following text into the bottom of the bashrc file:
 
-```
+```bash
 grepit() {
  local search_term="$1"
  local cmd
@@ -34,13 +38,13 @@ grepit() {
 
 And then 
 
-```
+```bash
 source ~/.bashrc
 ```
 
 Use it with
 
-```
+```bash
 grepit <search term>
 ```
 

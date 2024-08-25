@@ -1,15 +1,10 @@
-![image](https://github.com/user-attachments/assets/5561943c-0a51-4861-871f-e41749afbe90)
-
+![image](https://github.com/user-attachments/assets/6b39d6ca-1762-449c-8e91-26ea69613309)
 
 # grepit
 
 The secure way to to never remember terminal commands.
 
-
-![image](https://github.com/user-attachments/assets/6b39d6ca-1762-449c-8e91-26ea69613309)
-
-
-Wanna know how to us it?
+Wanna know how to use it?
 
 ```bash
 sudo apt install fzf

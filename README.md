@@ -2,10 +2,12 @@
 
 
 # grepit
-The secure way to to never remember terminal commands
+
+The secure way to to never remember terminal commands.
 
 
-![image](https://github.com/user-attachments/assets/149bf34a-0c0d-4dc4-8192-25e9c4afe5f1)
+![image](https://github.com/user-attachments/assets/6b39d6ca-1762-449c-8e91-26ea69613309)
+
 
 Wanna know how to us it?
 

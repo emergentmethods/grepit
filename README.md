@@ -7,36 +7,13 @@ The secure way to to never remember terminal commands.
 Wanna know how to use it?
 
 ```bash
-sudo apt install fzf
-vim ~/.bashrc
+curl -s https://raw.githubusercontent.com/emergentmethods/grepit/main/install_grepit.sh | bash
 ```
 
-Copy the following text into the bottom of the bashrc file:
+This command will fetch the script directly from the GitHub repository and execute it. Ensure that the script has the appropriate execute permissions before committing it:
 
 ```bash
-grepit() {
- local search_term="$1"
- local cmd
-
- if [ -n "$search_term" ]; then
- cmd=$(history | tac | grep "$search_term" | fzf --height=100% --layout=reverse --border --prompt="Select command to run: " --no-preview | sed 's/^[ ]*[0-9]*[ ]*//')
- else
- cmd=$(history | tac | fzf --height=100% --layout=reverse --border --prompt="Select command to run: " --no-preview | sed 's/^[ ]*[0-9]*[ ]*//')
- fi
-
- if [ -n "$cmd" ]; then
- echo "Running: $cmd"
- eval "$cmd"
- else
- echo "No command selected."
- fi
-}
-```
-
-And then 
-
-```bash
-source ~/.bashrc
+chmod +x install_grepit.sh
 ```
 
 Use it with

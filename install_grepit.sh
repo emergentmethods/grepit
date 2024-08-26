@@ -9,7 +9,7 @@ else
     echo "fzf is already installed."
 fi
 
-# Define the grepit function
+# Define the updated grepit function with history recording
 grepit_function="
 grepit() {
     local search_term=\"\$1\"
@@ -23,6 +23,8 @@ grepit() {
 
     if [ -n \"\$cmd\" ]; then
         echo \"Running: \$cmd\"
+        # Add the selected command to the history
+        history -s \"\$cmd\"
         eval \"\$cmd\"
     else
         echo \"No command selected.\"
@@ -38,7 +40,7 @@ else
     echo "grepit function is already in ~/.bashrc"
 fi
 
-# Source the .bashrc file
+# Source the .bashrc file to apply changes
 echo "Sourcing ~/.bashrc..."
 source ~/.bashrc
 

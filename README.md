@@ -10,12 +10,6 @@ Wanna know how to use it?
 curl -s https://raw.githubusercontent.com/emergentmethods/grepit/main/install_grepit.sh | bash
 ```
 
-This command will fetch the script directly from the GitHub repository and execute it. Ensure that the script has the appropriate execute permissions before committing it:
-
-```bash
-chmod +x install_grepit.sh
-```
-
 Use it with
 
 ```bash

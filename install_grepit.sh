@@ -21,9 +21,11 @@ if [ -f "$HOME/.bash_history" ] && [ ! -f "$GREPIT_HISTORY" ]; then
     IMPORT_TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
 
     # Read bash history and convert to grepit format
+    # Skip timestamp comments (lines starting with #) from HISTTIMEFORMAT
     while IFS= read -r cmd; do
-        # Skip empty lines
+        # Skip empty lines and timestamp comments
         [ -z "$cmd" ] && continue
+        [[ "$cmd" =~ ^#[0-9]+$ ]] && continue
         # Add timestamp and append to grepit history
         echo "$IMPORT_TIMESTAMP | $cmd" >> "$GREPIT_HISTORY"
     done < "$HOME/.bash_history"
@@ -73,9 +75,9 @@ grepit() {
     touch \"\$GREPIT_HISTORY_FILE\"
 
     if [ -n \"\$search_term\" ]; then
-        cmd=\$(tac \"\$GREPIT_HISTORY_FILE\" | sed 's/^[^|]*| //' | awk '!seen[\$0]++' | grep \"\$search_term\" | fzf --height=100% --layout=reverse --border --prompt=\"Select command to run: \" --no-preview)
+        cmd=\$(tac \"\$GREPIT_HISTORY_FILE\" | cut -d'|' -f2- | sed 's/^ //' | awk '!seen[\$0]++' | grep \"\$search_term\" | fzf --height=100% --layout=reverse --border --prompt=\"Select command to run: \" --no-preview)
     else
-        cmd=\$(tac \"\$GREPIT_HISTORY_FILE\" | sed 's/^[^|]*| //' | awk '!seen[\$0]++' | fzf --height=100% --layout=reverse --border --prompt=\"Select command to run: \" --no-preview)
+        cmd=\$(tac \"\$GREPIT_HISTORY_FILE\" | cut -d'|' -f2- | sed 's/^ //' | awk '!seen[\$0]++' | fzf --height=100% --layout=reverse --border --prompt=\"Select command to run: \" --no-preview)
     fi
 
     if [ -n \"\$cmd\" ]; then

@@ -42,7 +42,8 @@ GREPIT_LAST_CMD=\"\"
 # Function to append command to centralized history
 _grepit_save_command() {
     local last_cmd
-    last_cmd=\$(HISTTIMEFORMAT= history 1 | sed 's/^[ ]*[0-9]*[ ]*//')
+    # Get last command, strip number and any timestamp from HISTTIMEFORMAT
+    last_cmd=\$(HISTTIMEFORMAT= history 1 | sed -e 's/^[ ]*[0-9]*[ ]*//' -e 's/^[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\} [0-9]\\{2\\}:[0-9]\\{2\\}:[0-9]\\{2\\} //')
 
     # Skip if command is empty, starts with space, or is the same as last command
     if [ -n \"\$last_cmd\" ] && [ \"\$last_cmd\" != \"\$GREPIT_LAST_CMD\" ] && [[ ! \"\$last_cmd\" =~ ^[[:space:]] ]]; then

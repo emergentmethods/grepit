@@ -72,9 +72,9 @@ grepit() {
     touch \"\$GREPIT_HISTORY_FILE\"
 
     if [ -n \"\$search_term\" ]; then
-        cmd=\$(tac \"\$GREPIT_HISTORY_FILE\" | sed 's/^[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\} [0-9]\\{2\\}:[0-9]\\{2\\}:[0-9]\\{2\\} | //' | awk '!seen[\$0]++' | grep \"\$search_term\" | fzf --height=100% --layout=reverse --border --prompt=\"Select command to run: \" --no-preview)
+        cmd=\$(tac \"\$GREPIT_HISTORY_FILE\" | sed 's/^[^|]*| //' | awk '!seen[\$0]++' | grep \"\$search_term\" | fzf --height=100% --layout=reverse --border --prompt=\"Select command to run: \" --no-preview)
     else
-        cmd=\$(tac \"\$GREPIT_HISTORY_FILE\" | sed 's/^[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\} [0-9]\\{2\\}:[0-9]\\{2\\}:[0-9]\\{2\\} | //' | awk '!seen[\$0]++' | fzf --height=100% --layout=reverse --border --prompt=\"Select command to run: \" --no-preview)
+        cmd=\$(tac \"\$GREPIT_HISTORY_FILE\" | sed 's/^[^|]*| //' | awk '!seen[\$0]++' | fzf --height=100% --layout=reverse --border --prompt=\"Select command to run: \" --no-preview)
     fi
 
     if [ -n \"\$cmd\" ]; then

@@ -4,11 +4,15 @@
 
 The secure way to to never remember terminal commands.
 
+Works on Linux and macOS, with both bash and zsh.
+
 Wanna know how to use it?
 
 ```bash
 curl -s https://raw.githubusercontent.com/emergentmethods/grepit/main/install_grepit.sh | bash
 ```
+
+On macOS, make sure [Homebrew](https://brew.sh) is installed first — the installer uses it to grab `fzf`.
 
 Use it with
 

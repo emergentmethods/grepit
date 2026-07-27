@@ -48,7 +48,6 @@ fi
 bash_history_capture="
 # Grepit centralized history configuration (bash)
 GREPIT_HISTORY_FILE=\"\$HOME/.cache/grepit/history\"
-GREPIT_LAST_CMD=\"\"
 
 # Function to append command to centralized history
 _grepit_save_command() {
@@ -56,15 +55,20 @@ _grepit_save_command() {
     # Get last command, strip number and any timestamp from HISTTIMEFORMAT
     last_cmd=\$(HISTTIMEFORMAT= history 1 | sed -e 's/^[ ]*[0-9]*[ ]*//' -e 's/^[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\} [0-9]\\{2\\}:[0-9]\\{2\\}:[0-9]\\{2\\} //')
 
-    # Skip if command is empty, starts with space, or is the same as last command
-    if [ -n \"\$last_cmd\" ] && [ \"\$last_cmd\" != \"\$GREPIT_LAST_CMD\" ] && [[ ! \"\$last_cmd\" =~ ^[[:space:]] ]]; then
+    # Skip if command is empty or starts with space
+    if [ -n \"\$last_cmd\" ] && [[ ! \"\$last_cmd\" =~ ^[[:space:]] ]]; then
         # Use a mkdir-based lock to safely append to history file from multiple terminals
         # (portable across Linux and macOS, unlike flock which isn't built into macOS)
         local lockdir=\"\$GREPIT_HISTORY_FILE.lockdir\"
         while ! mkdir \"\$lockdir\" 2>/dev/null; do sleep 0.01; done
-        echo \"\$(date '+%Y-%m-%d %H:%M:%S') | \$last_cmd\" >> \"\$GREPIT_HISTORY_FILE\"
+        # Compare against the file's actual last entry (not an in-memory variable) so
+        # dedup stays correct across re-sourcing this file and across multiple terminals
+        local prev_cmd
+        prev_cmd=\$(tail -n 1 \"\$GREPIT_HISTORY_FILE\" 2>/dev/null | cut -d'|' -f2- | sed 's/^ //')
+        if [ \"\$last_cmd\" != \"\$prev_cmd\" ]; then
+            echo \"\$(date '+%Y-%m-%d %H:%M:%S') | \$last_cmd\" >> \"\$GREPIT_HISTORY_FILE\"
+        fi
         rmdir \"\$lockdir\"
-        GREPIT_LAST_CMD=\"\$last_cmd\"
     fi
 }
 
@@ -115,21 +119,25 @@ grepit() {
 zsh_history_capture="
 # Grepit centralized history configuration (zsh)
 GREPIT_HISTORY_FILE=\"\$HOME/.cache/grepit/history\"
-GREPIT_LAST_CMD=\"\"
 
 # Function to append command to centralized history
 _grepit_save_command() {
     local last_cmd
     last_cmd=\"\$(fc -ln -1)\"
 
-    # Skip if command is empty, starts with space, or is the same as last command
-    if [ -n \"\$last_cmd\" ] && [ \"\$last_cmd\" != \"\$GREPIT_LAST_CMD\" ] && [[ ! \"\$last_cmd\" =~ ^[[:space:]] ]]; then
+    # Skip if command is empty or starts with space
+    if [ -n \"\$last_cmd\" ] && [[ ! \"\$last_cmd\" =~ ^[[:space:]] ]]; then
         # Use a mkdir-based lock to safely append to history file from multiple terminals
         local lockdir=\"\$GREPIT_HISTORY_FILE.lockdir\"
         while ! mkdir \"\$lockdir\" 2>/dev/null; do sleep 0.01; done
-        echo \"\$(date '+%Y-%m-%d %H:%M:%S') | \$last_cmd\" >> \"\$GREPIT_HISTORY_FILE\"
+        # Compare against the file's actual last entry (not an in-memory variable) so
+        # dedup stays correct across re-sourcing this file and across multiple terminals
+        local prev_cmd
+        prev_cmd=\$(tail -n 1 \"\$GREPIT_HISTORY_FILE\" 2>/dev/null | cut -d'|' -f2- | sed 's/^ //')
+        if [ \"\$last_cmd\" != \"\$prev_cmd\" ]; then
+            echo \"\$(date '+%Y-%m-%d %H:%M:%S') | \$last_cmd\" >> \"\$GREPIT_HISTORY_FILE\"
+        fi
         rmdir \"\$lockdir\"
-        GREPIT_LAST_CMD=\"\$last_cmd\"
     fi
 }
 

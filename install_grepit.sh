@@ -142,9 +142,8 @@ _grepit_save_command() {
 }
 
 # Add to precmd_functions to capture every command (zsh's equivalent of PROMPT_COMMAND)
-if (( ! \${precmd_functions[(Ie)_grepit_save_command]} )); then
-    precmd_functions+=(_grepit_save_command)
-fi
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd _grepit_save_command
 "
 
 # Define the zsh grepit function with centralized history
